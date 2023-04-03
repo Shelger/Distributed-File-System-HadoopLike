@@ -1,0 +1,120 @@
+syntax = "proto3";
+option go_package = "./messages";
+
+message StorageNode {
+    string addr = 1;
+    uint32 id = 2;
+    uint64 space = 3;
+}
+
+message Heartbeat {
+    bool alive = 1;
+    uint64 space = 2;
+    uint32 num_of_handled = 3;
+    string node_name = 4;
+}
+
+message FileChecksumRequest {
+    string file_name = 1;
+    bytes checksum = 2;
+}
+
+message StorageRequest {
+    bytes chunk = 1;
+    uint64 size = 2;
+    string fileName = 3;
+    int32 idx = 4;
+    bytes checksum = 5;
+}
+
+message RetrievalRequest {
+    string file_name = 1;
+}
+
+message DeleteRequest {
+    string file_name = 1;
+}
+
+message ChecksumVerification {
+   bytes checksum = 1;
+}
+
+message Response {
+    bool ok = 1;
+    string message = 2;
+}
+
+message AskNodeResponse {
+    repeated string node_name = 1;
+}
+
+message RetrievalResponse {
+    Response resp = 1;
+    uint64 size = 2;
+    bytes chunk = 3;
+    string file_name = 4;
+}
+
+message ListRequest {
+    bool ls = 1;
+}
+
+message ListResponse {
+    repeated string file_name = 1;
+}
+
+message InfoRequest {
+    bool info = 1;
+}
+
+message InfoResponse {
+    repeated string active_node = 1;
+    uint64 space = 2;
+    uint32 num_of_handled = 3;
+}
+
+message AskChecksumRequest {
+    string file_name = 1;
+}
+
+message AskCopyNodesRequest {
+    string node1 = 1;
+    string node2 = 2;
+}
+
+message InternalFileTransferRequest {
+    string path = 1;
+    bytes chunk = 2;
+}
+
+message SaveRequest {
+    string next_node = 1;
+}
+
+message AskSaveFileRequest {
+    string file_name = 1;
+}
+
+message Wrapper {
+    oneof msg {
+        Response response = 1;
+        StorageRequest storage_req = 2;
+        RetrievalRequest retrieval_req = 3;
+        RetrievalResponse retrieval_resp = 4;
+        ChecksumVerification checksum = 5;
+        StorageNode sn = 6;
+        Heartbeat hb = 7;
+        AskNodeResponse ask_node = 8;
+        DeleteRequest delete_req= 9;
+        ListRequest list_req = 10;
+        ListResponse list_resp = 11;
+        InfoRequest info_req = 12;
+        InfoResponse info_resp = 13;
+        FileChecksumRequest file_checksum_req = 14;
+        AskChecksumRequest ask_checksum_req = 15;
+        AskCopyNodesRequest ask_copy_req = 16;
+        InternalFileTransferRequest internal_transfer_req = 17;
+        SaveRequest save_req = 18;
+        AskSaveFileRequest ask_save_file_req = 19;
+    }
+}
